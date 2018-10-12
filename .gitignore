@@ -1,4 +1,5 @@
 dist
+dist-deploy
 node_modules
 gh-page
 *.swp
