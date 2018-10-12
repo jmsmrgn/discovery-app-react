@@ -6,6 +6,7 @@ import formatDate from '../../utils/format-date'
 import Thumbnail from '../assets/Thumbnail'
 import EntryLinkContainer from './EntryLinkContainer'
 import marked from 'marked'
+import ReactJson from 'react-json-view'
 
 function Field ({definition, content, location}) {
   return (
@@ -44,6 +45,26 @@ function renderContent (content, definition, location) {
     return renderBoolean(content)
   } else if (type === 'Text') {
     return <p dangerouslySetInnerHTML={renderMarkdown(content)} />
+  } else if (type === 'RichText') {
+    return (
+      <ReactJson
+        name={false}
+        collapsed={false}
+        style={{
+          borderRadius: '3px',
+          padding: '10px',
+          backgroundColor: '#f9f9f9'
+        }}
+        theme="summerfruit:inverted"
+        src={{ content }}
+        collapseStringsAfterLength={15}
+        displayObjectSize={true}
+        enableClipboard={true}
+        indentWidth={2}
+        displayDataTypes={false}
+        iconStyle="square"
+      />
+    )
   } else if (content.sys || content.fields) {
     return <div>
       <p>Error rendering field {definition.id} with content:</p>
@@ -60,7 +81,7 @@ function renderMarkdown (content) {
   }
 }
 function removeIvalidDataURL (content) {
-  let regex = /data:\S+;base64\S*/gm 
+  let regex = /data:\S+;base64\S*/gm
   return content.replace(regex, '#')
 }
 function renderEntryLink (content, location) {
